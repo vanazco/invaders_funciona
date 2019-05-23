@@ -64,6 +64,7 @@ public class AlienArmy {
 
         removeDeadAliens();
         removeShoots();
+        checkAllDead();
     }
 
 
@@ -133,4 +134,7 @@ public class AlienArmy {
         }
     }
 
+    boolean checkAllDead(){
+        return aliens.isEmpty();
+    }
 }

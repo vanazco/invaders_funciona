@@ -11,6 +11,8 @@ public class World {
     Ship ship;
     AlienArmy alienArmy;
     Weapong weapong;
+    EndGame endGame;
+    Text text;
 
     int WORLD_WIDTH, WORLD_HEIGHT;
 
@@ -24,29 +26,47 @@ public class World {
         ship = new Ship(WORLD_WIDTH/2);
         alienArmy = new AlienArmy(WORLD_WIDTH, WORLD_HEIGHT);
         weapong = new Weapong(random);
+        endGame = new EndGame();
+        text = new Text();
     }
 
     public void render(float delta, SpriteBatch batch, Assets assets){
+        if(!endGame.finish){
+            update(delta, assets);
 
-        update(delta, assets);
-
-        batch.begin();
-        space.render(batch);
-        ship.render(batch);
-        alienArmy.render(batch);
-        if(!weapong.death){
-            weapong.render(batch);
+            batch.begin();
+            space.render(batch);
+            ship.render(batch);
+            alienArmy.render(batch);
+            if(!weapong.death){
+                weapong.render(batch);
+            }
+            text.render(batch,WORLD_HEIGHT);
+            batch.end();
+        }else{
+            batch.begin();
+            endGame.render(batch,WORLD_WIDTH/4);
+            batch.end();
         }
-        batch.end();
     }
 
     void update(float delta, Assets assets){
-        space.update(delta, assets);
-        ship.update(delta, assets);
-        alienArmy.update(delta, assets);
-        weapong.update(delta,assets);
+
+            space.update(delta, assets);
+            ship.update(delta, assets);
+            alienArmy.update(delta, assets);
+            weapong.update(delta,assets);
+            endGame.update(delta,assets);
+            text.update(delta);
 
         checkCollisions(assets);
+        checkGame();
+    }
+
+    private void checkGame() {
+        if (alienArmy.checkAllDead()){
+            endGame.finish = true;
+        }
     }
 
     private void checkCollisions(Assets assets) {
@@ -108,6 +128,7 @@ public class World {
             ship.position.x = 0;
         }
     }
+
     private void checkWeapongInWorld(){
         Rectangle shipRectangle = new Rectangle(ship.position.x, ship.position.y, ship.frame.getRegionWidth(), ship.frame.getRegionHeight());
         Rectangle weapongRectangle = new Rectangle(weapong.position.x, weapong.position.y, weapong.texture.getRegionWidth(), weapong.texture.getRegionHeight());

@@ -346,16 +346,23 @@ size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-space
+gameover
   rotate: false
   xy: 2, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+space
+  rotate: false
+  xy: 2, 254
   size: 384, 256
   orig: 384, 256
   offset: 0, 0
   index: 6
 space
   rotate: false
-  xy: 388, 2
+  xy: 388, 254
   size: 384, 256
   orig: 384, 256
   offset: 0, 0
