@@ -4,11 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Assets;
+import com.mygdx.game.Timer;
 
 public class World {
     Space space;
     Ship ship;
     AlienArmy alienArmy;
+    Weapong weapong;
 
     int WORLD_WIDTH, WORLD_HEIGHT;
 
@@ -16,9 +18,12 @@ public class World {
         this.WORLD_WIDTH = WORLD_WIDTH;
         this.WORLD_HEIGHT = WORLD_HEIGHT;
 
+        final int random = (int) (Math.random() * (WORLD_WIDTH-54)+1);
+
         space = new Space();
         ship = new Ship(WORLD_WIDTH/2);
         alienArmy = new AlienArmy(WORLD_WIDTH, WORLD_HEIGHT);
+        weapong = new Weapong(random);
     }
 
     public void render(float delta, SpriteBatch batch, Assets assets){
@@ -29,6 +34,9 @@ public class World {
         space.render(batch);
         ship.render(batch);
         alienArmy.render(batch);
+        if(!weapong.death){
+            weapong.render(batch);
+        }
         batch.end();
     }
 
@@ -36,6 +44,7 @@ public class World {
         space.update(delta, assets);
         ship.update(delta, assets);
         alienArmy.update(delta, assets);
+        weapong.update(delta,assets);
 
         checkCollisions(assets);
     }
@@ -45,6 +54,7 @@ public class World {
         checkShootsInWorld();
         checkShootsToAlien(assets);
         checkShootsToShip();
+        checkWeapongInWorld();
     }
 
     private void checkShootsToShip() {
@@ -96,6 +106,17 @@ public class World {
             ship.position.x = WORLD_WIDTH-32;
         } else if(ship.position.x < 0){
             ship.position.x = 0;
+        }
+    }
+    private void checkWeapongInWorld(){
+        Rectangle shipRectangle = new Rectangle(ship.position.x, ship.position.y, ship.frame.getRegionWidth(), ship.frame.getRegionHeight());
+        Rectangle weapongRectangle = new Rectangle(weapong.position.x, weapong.position.y, weapong.texture.getRegionWidth(), weapong.texture.getRegionHeight());
+        if(Intersector.overlaps(weapongRectangle, shipRectangle)){
+            weapong.remove();
+            for(Shoot shoot: ship.weapon.shoots){
+                shoot.speed = 10;
+                ship.weapon.boost = weapong.death;
+            }
         }
     }
 }

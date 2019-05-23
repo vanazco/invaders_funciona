@@ -11,6 +11,7 @@ public class Weapon {
 
     Timer shootTimer;
     float shootRate = 0.4f;
+    boolean boost = false;
 
     Weapon(){
         shoots = new Array<Shoot>();
@@ -32,7 +33,9 @@ public class Weapon {
     }
 
     public void shoot(float position){
-        if(shootTimer.check()){
+        if(shootTimer.check() && ! boost){
+            shoots.add(new Shoot(position));
+        } else if(boost){
             shoots.add(new Shoot(position));
         }
     }
