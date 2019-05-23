@@ -13,6 +13,7 @@ public class World {
     Weapong weapong;
     EndGame endGame;
     Text text;
+    int points;
 
     int WORLD_WIDTH, WORLD_HEIGHT;
 
@@ -21,7 +22,7 @@ public class World {
         this.WORLD_HEIGHT = WORLD_HEIGHT;
 
         final int random = (int) (Math.random() * (WORLD_WIDTH-54)+1);
-
+        points = 0;
         space = new Space();
         ship = new Ship(WORLD_WIDTH/2);
         alienArmy = new AlienArmy(WORLD_WIDTH, WORLD_HEIGHT);
@@ -41,7 +42,7 @@ public class World {
             if(!weapong.death){
                 weapong.render(batch);
             }
-            text.render(batch,WORLD_HEIGHT);
+            text.render(batch,WORLD_HEIGHT,points);
             batch.end();
         }else{
             batch.begin();
@@ -101,6 +102,7 @@ public class World {
                         alien.kill();
                         shoot.remove();
                         assets.aliendieSound.play();
+                        points +=10;
                     }
                 }
             }

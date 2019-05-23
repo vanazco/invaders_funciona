@@ -12,8 +12,8 @@ public class Text {
         font = new BitmapFont();
     }
 
-    public void render(SpriteBatch batch,int y) {
-        font.draw(batch,"Score:", 0,y);
+    public void render(SpriteBatch batch,int y,int puntos) {
+        font.draw(batch,"Score:" + puntos, 0,y);
     }
 
     public void update(float delta) {
